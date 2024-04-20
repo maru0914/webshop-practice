@@ -41,6 +41,8 @@ class Product extends Component
         );
 
         $this->banner('カートに追加されました');
+
+        $this->emit('productAddedToCart');
     }
 
     public function render(): View
