@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Actions\Webshop\AddProductVariantToCart;
 use Illuminate\View\View;
 use Livewire\Component;
 
@@ -28,10 +29,13 @@ class Product extends Component
         return \App\Models\Product::findOrFail($this->productId);
     }
 
-    public function addToCart()
+    public function addToCart(AddProductVariantToCart $cart)
     {
         $this->validate();
 
+        $cart->add(
+            variantId: $this->variant
+        );
     }
 
     public function render(): View

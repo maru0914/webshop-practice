@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
 
@@ -20,5 +21,9 @@ class DatabaseSeeder extends Seeder
             ->has(Image::factory(3)
                 ->sequence(fn (Sequence $sequence) => ['featured' => $sequence->index % 3 === 0]))
             ->create();
+
+        User::factory()->create([
+            'email' => 'takuya@example.com',
+        ]);
     }
 }
