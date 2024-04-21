@@ -5,40 +5,47 @@ namespace App\Http\Livewire;
 use App\Factories\CartFactory;
 use App\Models\CartItem;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\View\View;
 use Livewire\Component;
 
 /**
+ * @property \App\Models\Cart $cart
  * @property Collection<CartItem> $items
  */
 class Cart extends Component
 {
-    public function getItemsProperty()
+    public function getCartProperty(): \App\Models\Cart
     {
-        return CartFactory::make()->items;
+        return CartFactory::make()->loadMissing('items', 'items.product', 'items.variant');
     }
 
-    public function increment($itemId)
+    public function getItemsProperty(): Collection
     {
-        CartFactory::make()->items()->find($itemId)?->increment('quantity');
+        return $this->cart->items;
     }
 
-    public function decrement($itemId)
+    public function increment($itemId): void
     {
-        $item = CartFactory::make()->items()->find($itemId);
+        $this->cart->items()->find($itemId)?->increment('quantity');
+    }
+
+    public function decrement($itemId): void
+    {
+        $item =  $this->cart->items()->find($itemId);
 
         if ($item->quantity > 1) {
             $item->decrement('quantity');
         }
     }
 
-    public function delete($itemId)
+    public function delete($itemId): void
     {
-        CartFactory::make()->items()->where('id', $itemId)->delete();
+         $this->cart->items()->where('id', $itemId)->delete();
 
         $this->emit('productRemovedFromCart');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.cart');
     }
