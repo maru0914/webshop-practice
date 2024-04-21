@@ -11,12 +11,13 @@ use Livewire\Component;
 class NavigationCart extends Component
 {
     public $listeners = [
-      'productAddedToCart' => '$refresh',
+        'productAddedToCart' => '$refresh',
+        'productRemovedFromCart' => '$refresh',
     ];
 
     public function getCountProperty()
     {
-       return CartFactory::make()->items()->sum('quantity');
+        return CartFactory::make()->items()->sum('quantity');
     }
 
     public function render()
