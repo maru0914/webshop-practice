@@ -1,87 +1,26 @@
 @component('mail::message')
-{{ $order->user->name }} 様
+Hey {{ $order->user->name }},
 
-ご注文ありがとうございます！以下、注文の詳細です。
+Thank you for your order. You can find all the details below.
 
-<table style="width: 100%">
-    <thead>
-    <tr>
-        <th>商品</th>
-        <th>価格</th>
-        <th>数量</th>
-        <th>税額</th>
-        <th>合計</th>
-    </tr>
-    </thead>
-    <tbody>
+@component('mail::table')
+    | Item                         | Price              | Quantity           | Tax           | Total   |
+    | :--------------------------- | ------------------:| ------------------:| -------------:| -------:|
     @foreach($order->items as $item)
-        <tr>
-            <td>
-                {{ $item->name }} <br>
-                {{ $item->description }}
-            </td>
-            <td>
-                {{ $item->price }}
-            </td>
-            <td>
-                {{ $item->quantity }}
-            </td>
-            <td>
-                {{ $item->amount_tax }}
-            </td>
-            <td>
-                {{ $item->amount_total }}
-            </td>
-        </tr>
+        | **{{ $item->name }}** <br>{{ $item->description }} | {{ $item->price }} | {{ $item->quantity }} | {{ $item->amount_tax }} | {{ $item->amount_total }} |
     @endforeach
-    </tbody>
-    <tfoot>
     @if($order->amount_shipping->isPositive())
-        <tr>
-            <td colspan="4" style="text-align: right;">
-                配送料
-            </td>
-            <td>
-                {{ $order->amount_shipping }}
-            </td>
-        </tr>
+        |||| **Shipping** | {{ $order->amount_shipping }} |
     @endif
     @if($order->amount_discount->isPositive())
-        <tr>
-            <td colspan="4" style="text-align: right;">
-                割引金額
-            </td>
-            <td>
-                {{ $order->amount_discount }}
-            </td>
-        </tr>
+        |||| **Discount** | {{ $order->amount_discount }} |
     @endif
     @if($order->amount_tax->isPositive())
-        <tr>
-            <td colspan="4" style="text-align: right;">
-                税額
-            </td>
-            <td>
-                {{ $order->amount_tax }}
-            </td>
-        </tr>
+        |||| **Tax** | {{ $order->amount_tax }} |
     @endif
-    <tr>
-        <td colspan="4" style="text-align: right;">
-            小計
-        </td>
-        <td>
-            {{ $order->amount_subtotal }}
-        </td>
-    </tr>
-    <tr>
-        <td colspan="4" style="text-align: right;">
-            合計
-        </td>
-        <td>
-            {{ $order->amount_total }}
-        </td>
-    </tr>
-    </tfoot>
-</table>
+    |||| **Subtotal** | {{ $order->amount_subtotal }} |
+    |||| **Total** | {{ $order->amount_total }} |
+@endcomponent
+
+
 @endcomponent
