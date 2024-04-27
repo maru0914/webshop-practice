@@ -1,26 +1,29 @@
 @component('mail::message')
-Hey {{ $order->user->name }},
+{{ $order->user->name }} 様
 
-Thank you for your order. You can find all the details below.
+ご注文ありがとうございます！以下ご注文の詳細です。
 
 @component('mail::table')
-    | Item                         | Price              | Quantity           | Tax           | Total   |
+    | 商品                          | 価格              | 数量           | 税額           | 合計   |
     | :--------------------------- | ------------------:| ------------------:| -------------:| -------:|
     @foreach($order->items as $item)
         | **{{ $item->name }}** <br>{{ $item->description }} | {{ $item->price }} | {{ $item->quantity }} | {{ $item->amount_tax }} | {{ $item->amount_total }} |
     @endforeach
     @if($order->amount_shipping->isPositive())
-        |||| **Shipping** | {{ $order->amount_shipping }} |
+        |||| **配送手数料** | {{ $order->amount_shipping }} |
     @endif
     @if($order->amount_discount->isPositive())
-        |||| **Discount** | {{ $order->amount_discount }} |
+        |||| **割引金額** | {{ $order->amount_discount }} |
     @endif
     @if($order->amount_tax->isPositive())
-        |||| **Tax** | {{ $order->amount_tax }} |
+        |||| **税額** | {{ $order->amount_tax }} |
     @endif
-    |||| **Subtotal** | {{ $order->amount_subtotal }} |
-    |||| **Total** | {{ $order->amount_total }} |
+    |||| **小計** | {{ $order->amount_subtotal }} |
+    |||| **合計** | {{ $order->amount_total }} |
 @endcomponent
 
+@component('mail::button', ['url' => route('view-order', $order->id), 'color' => 'success'])
+    注文を見る
+@endcomponent
 
 @endcomponent
