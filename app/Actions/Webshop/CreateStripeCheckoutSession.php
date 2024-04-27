@@ -23,6 +23,9 @@ class CreateStripeCheckoutSession
                         'allowed_countries' => [
                             'JP'
                         ]
+                    ],
+                    'metadata' => [
+                        'user_id' => $cart->user->id,
                     ]
                 ]
         );
