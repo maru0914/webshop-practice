@@ -30,4 +30,5 @@ Route::middleware([
 ])->group(function () {
     Route::get('/checkout-status', \App\Http\Livewire\CheckoutStatus::class)->name('checkout-status');
     Route::get('/order/{orderId}', \App\Http\Livewire\ViewOrder::class)->name('view-order');
+    Route::get('/my-orders', \App\Http\Livewire\MyOrders::class)->name('my-orders');
 });
