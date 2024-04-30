@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Actions\Webshop\AddProductVariantToCart;
 use Illuminate\View\View;
 use Laravel\Jetstream\InteractsWithBanner;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 /**
@@ -27,7 +28,8 @@ class Product extends Component
         $this->variant = $this->product->variants()->value('id');
     }
 
-    public function getProductProperty(): \App\Models\Product
+    #[Computed]
+    public function product(): \App\Models\Product
     {
         return \App\Models\Product::findOrFail($this->productId);
     }
@@ -42,7 +44,7 @@ class Product extends Component
 
         $this->banner('カートに追加されました');
 
-        $this->emit('productAddedToCart');
+        $this->dispatch('productAddedToCart');
     }
 
     public function render(): View

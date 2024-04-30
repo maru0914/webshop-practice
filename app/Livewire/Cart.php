@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use App\Actions\Webshop\CreateStripeCheckoutSession;
 use App\Factories\CartFactory;
 use App\Models\CartItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 /**
@@ -20,12 +21,14 @@ class Cart extends Component
         return $checkoutSession->createFromCart($this->cart);
     }
 
-    public function getCartProperty(): \App\Models\Cart
+    #[Computed]
+    public function cart(): \App\Models\Cart
     {
         return CartFactory::make()->loadMissing('items', 'items.product', 'items.variant');
     }
 
-    public function getItemsProperty(): Collection
+    #[Computed]
+    public function items(): Collection
     {
         return $this->cart->items;
     }
@@ -48,7 +51,7 @@ class Cart extends Component
     {
          $this->cart->items()->where('id', $itemId)->delete();
 
-        $this->emit('productRemovedFromCart');
+        $this->dispatch('productRemovedFromCart');
     }
 
     public function render(): View
